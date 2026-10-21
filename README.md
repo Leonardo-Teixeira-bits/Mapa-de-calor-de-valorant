@@ -1,4 +1,4 @@
-# 🎯 Análise Geoespacial de Partidas de VALORANT (UNIVAVA)
+#  Análise Geoespacial de Partidas de VALORANT 
 ### HACKATHON Valorant • Equipe Cão
 
 <p align="center">
@@ -11,7 +11,7 @@ A aplicação processa **336 partidas reais** (5.068 rounds e 46.753 abates), pr
 
 ---
 
-## ⚡ Quickstart (Execução 100% Offline)
+##  Quickstart (Execução 100% Offline)
 
 A aplicação foi projetada para operar em modo estritamente **offline**, sem nenhuma dependência de APIs externas em tempo de execução.
 
@@ -80,7 +80,7 @@ Os mapas são agrupados em 3 níveis no dashboard:
 
 ---
 
-## 🏗️ Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 ├── app.py                      # Dashboard interativo Streamlit
