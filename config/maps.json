@@ -1,0 +1,86 @@
+{
+  "/Game/Maps/Ascent/Ascent": {
+    "displayName": "Ascent",
+    "xMultiplier": 7e-05,
+    "yMultiplier": -7e-05,
+    "xScalarToAdd": 0.813895,
+    "yScalarToAdd": 0.573242
+  },
+  "/Game/Maps/Jam/Jam": {
+    "displayName": "Lotus",
+    "xMultiplier": 7.2e-05,
+    "yMultiplier": -7.2e-05,
+    "xScalarToAdd": 0.454789,
+    "yScalarToAdd": 0.917752
+  },
+  "/Game/Maps/Triad/Triad": {
+    "displayName": "Haven",
+    "xMultiplier": 7.5e-05,
+    "yMultiplier": -7.5e-05,
+    "xScalarToAdd": 1.09345,
+    "yScalarToAdd": 0.642728
+  },
+  "/Game/Maps/Bonsai/Bonsai": {
+    "displayName": "Split",
+    "xMultiplier": 7.8e-05,
+    "yMultiplier": -7.8e-05,
+    "xScalarToAdd": 0.842188,
+    "yScalarToAdd": 0.697578
+  },
+  "/Game/Maps/Juliett/Juliett": {
+    "displayName": "Sunset",
+    "xMultiplier": 7.8e-05,
+    "yMultiplier": -7.8e-05,
+    "xScalarToAdd": 0.5,
+    "yScalarToAdd": 0.515625
+  },
+  "/Game/Maps/Infinity/Infinity": {
+    "displayName": "Abyss",
+    "xMultiplier": 8.1e-05,
+    "yMultiplier": -8.1e-05,
+    "xScalarToAdd": 0.5,
+    "yScalarToAdd": 0.5
+  },
+  "/Game/Maps/Plummet/Plummet": {
+    "displayName": "Summit",
+    "xMultiplier": 7.5e-05,
+    "yMultiplier": -7.5e-05,
+    "xScalarToAdd": 0.047401,
+    "yScalarToAdd": 0.978891
+  },
+  "/Game/Maps/Foxtrot/Foxtrot": {
+    "displayName": "Breeze",
+    "xMultiplier": 7e-05,
+    "yMultiplier": -7e-05,
+    "xScalarToAdd": 0.465123,
+    "yScalarToAdd": 0.833078
+  },
+  "/Game/Maps/Pitt/Pitt": {
+    "displayName": "Pearl",
+    "xMultiplier": 7.8e-05,
+    "yMultiplier": -7.8e-05,
+    "xScalarToAdd": 0.480469,
+    "yScalarToAdd": 0.916016
+  },
+  "/Game/Maps/Port/Port": {
+    "displayName": "Icebox",
+    "xMultiplier": 7.2e-05,
+    "yMultiplier": -7.2e-05,
+    "xScalarToAdd": 0.460214,
+    "yScalarToAdd": 0.304687
+  },
+  "/Game/Maps/Duality/Duality": {
+    "displayName": "Bind",
+    "xMultiplier": 5.9e-05,
+    "yMultiplier": -5.9e-05,
+    "xScalarToAdd": 0.576941,
+    "yScalarToAdd": 0.967566
+  },
+  "/Game/Maps/Canyon/Canyon": {
+    "displayName": "Fracture",
+    "xMultiplier": 7.8e-05,
+    "yMultiplier": -7.8e-05,
+    "xScalarToAdd": 0.556952,
+    "yScalarToAdd": 1.155886
+  }
+}
