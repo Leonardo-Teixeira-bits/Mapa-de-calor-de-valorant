@@ -15,7 +15,7 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-10-21)
 
-**Core value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas.
+**Core value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas, priorizando Ascent, Lotus e Haven (72% das partidas).
 **Current focus:** Phase 1: Pipeline de Dados, Projeção Multi-Mapa e Estatística Bayesiana
 
 ## Current Position
@@ -23,7 +23,7 @@ See: .planning/PROJECT.md (updated 2026-10-21)
 Phase: 1 of 2 (Pipeline de Dados, Projeção Multi-Mapa e Estatística Bayesiana)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-10-21 — Project initialized with 2 coarse MVP phases
+Last activity: 2026-10-21 — Map prioritization aligned (Ascent, Lotus, Haven tier 1; N < 10 warning)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -57,7 +57,10 @@ Recent decisions affecting current work:
 - [Init]: Streamlit + Plotly selecionado como stack de UI para agilidade e integração com Python
 - [Init]: pandas + Parquet / JSON escolhidos para pipeline colunar de dados sem overhead de SQL/DuckDB
 - [Init]: Winrate posicional regularizado por KDE 2D com Beta prior Bayesiano
-- [Init]: Suporte aos 9 mapas com projeção estática offline via config/maps.json
+- [Init]: Suporte aos mapas com projeção estática offline via config/maps.json
+- [Scope]: Priorização de Tier 1: Ascent (67), Lotus (66) e Haven (61) somando 72.4% do dataset, validados primeiro
+- [Scope]: Demais mapas entram na sequência; mapas com N < 10 (Breeze: 3, Pearl: 2) recebem aviso explícito de amostra reduzida no dashboard
+- [Scope]: Execução 100% offline, zero chamadas externas em runtime
 
 ### Pending Todos
 
@@ -75,6 +78,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-21 00:50
-Stopped at: Project initialized, ready for Phase 1 planning
+Last session: 2026-10-21 00:55
+Stopped at: Map prioritization incorporated into planning docs, ready for Phase 1 planning
 Resume file: None

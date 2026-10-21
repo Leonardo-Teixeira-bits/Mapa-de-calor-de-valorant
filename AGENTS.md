@@ -4,14 +4,15 @@
 
 **Análise Geoespacial de Partidas de VALORANT**
 
-Plataforma analítica e visual para exploração geoespacial e temporal de eventos de partidas competitivas de VALORANT, utilizando dados de 268 partidas (5.310 rounds e 37.441 abates) de torneios universitários (UNIVAVA). A aplicação realiza ingestão com tolerância a falhas, projeta coordenadas 3D da Unreal Engine em minimapas 2D normalizados para todos os mapas do dataset, calcula densidades de abates/mortes por fase do round (início, meio, fim) e infere vantagem posicional (winrate suavizado por KDE com prior bayesiano), exibindo os resultados através de um dashboard interativo em Streamlit e Plotly.
+Plataforma analítica e visual para exploração geoespacial e temporal de eventos de partidas competitivas de VALORANT, utilizando dados de 268 partidas (5.310 rounds e 37.441 abates) de torneios universitários (UNIVAVA). A aplicação realiza ingestão com tolerância a falhas, projeta coordenadas 3D da Unreal Engine em minimapas 2D normalizados com calibração estática offline, priorizando o núcleo competitivo de **Ascent, Lotus e Haven** (72% das partidas). Calcula densidades de abates/mortes por fase do round (início, meio, fim) e infere vantagem posicional (winrate suavizado por KDE com prior bayesiano), exibindo os resultados através de um dashboard interativo em Streamlit e Plotly.
 
-**Core Value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas.
+**Core Value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas, com validação prioritária em Ascent, Lotus e Haven.
 
 ### Constraints
 
 - **Tech Stack**: Python 3.11+, Pydantic v2, pandas, SciPy / scikit-learn, Streamlit, Plotly
-- **Data Policy**: Zero chamadas externas para dados de partida durante a execução (apenas parâmetros estáticos de calibração locais em `config/maps.json`)
+- **Data Policy & Offline**: Execução 100% offline. Zero chamadas externas para dados de partida ou calibração (parâmetros estáticos estritamente em `config/maps.json`)
+- **Map Phasing**: MVP focado e validado primeiro em Ascent, Lotus e Haven; mapas com $N < 10$ recebem badge de alerta estatístico
 - **Timeline**: Entrega final do hackathon em 23/10/2026 às 23h59 BRT (protótipo funcional + vídeo pitch de até 5 minutos)
 - **Roadmap**: Enxuto (1 a 2 fases focadas em valor direto e entrega ponta a ponta)
 

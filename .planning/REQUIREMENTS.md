@@ -1,7 +1,7 @@
 # Requirements: Análise Geoespacial de Partidas de VALORANT
 
 **Defined:** 2026-10-21
-**Core Value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas.
+**Core Value:** Fornecer visualizações geoespaciais interativas precisas e estatisticamente confiáveis de abates, mortes e vantagem territorial (winrate bayesiano) por fase do round e mapa, utilizando unicamente os dados locais de partidas em um pipeline rápido e leve em Python/pandas, priorizando Ascent, Lotus e Haven (72% das partidas).
 
 ## v1 Requirements
 
@@ -15,21 +15,21 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Geospatial & Temporal Transformation
 
-- [ ] **GEO-01**: Projeção e normalização de coordenadas ($X,Y \rightarrow [0, 1]$) para todos os 9 mapas do dataset utilizando exclusivamente calibração offline em `config/maps.json`
+- [ ] **GEO-01**: Projeção e normalização de coordenadas ($X,Y \rightarrow [0, 1]$) 100% offline via `config/maps.json`, priorizando e validando primeiramente o núcleo de Ascent, Lotus e Haven (72% das partidas) antes de estender aos demais mapas
 - [ ] **GEO-02**: Segmentação temporal dinâmica de cada evento de kill em 3 terços proporcionais do round (Início: $0 \le t < 1/3$, Meio: $1/3 \le t < 2/3$, Fim: $2/3 \le t \le 1$)
 - [ ] **GEO-03**: Processamento e exportação dos dados tabulares limpos em formato Parquet colunar e caches JSON de alta performance utilizando pandas
 
 ### Statistical Modeling & Bayesian KDE
 
-- [ ] **STAT-01**: Cálculo de matrizes de densidade espacial (grid $100 \times 100$ e KDE 2D) para abates (Mapa A) e mortes (Mapa B) agregados por mapa e fase temporal
+- [ ] **STAT-01**: Cálculo de matrizes de densidade espacial (grid $100 \times 100$ e KDE 2D) para abates (Mapa A) e mortes (Mapa B) agregados por mapa e fase temporal, com validação primária no trio Ascent, Lotus e Haven
 - [ ] **STAT-02**: Cálculo de superfície de vantagem posicional (winrate espacial) aplicando KDE com regularização/prior Bayesiano (Beta prior ponderando a probabilidade de vitória do round em relação ao volume de eventos)
 
 ### Interactive Dashboard & Delivery
 
-- [ ] **UI-01**: Dashboard interativo desenvolvido em Streamlit com seletor de mapa (9 mapas suportados), filtros de time/lado e seletor de fases temporais (Início, Meio, Fim, Geral)
+- [ ] **UI-01**: Dashboard interativo desenvolvido em Streamlit com seletor de mapa (destacando o núcleo prioritário Ascent, Lotus e Haven), filtros de time/lado e seletor de fases temporais (Início, Meio, Fim, Geral)
 - [ ] **UI-02**: Renderização de mapas de calor interativos em Plotly com alternância suave entre Mapa de Abates, Mapa de Mortes e Mapa de Vantagem Territorial (Winrate Bayesiano)
-- [ ] **UI-03**: Painel analítico com KPIs da competição (total de rounds, total de abates, placar de vitórias por lado) e inspeção detalhada de eventos
-- [ ] **UI-04**: Documentação técnica completa no README.md com instruções de execução local, referência das fórmulas de projeção e guia de apresentação para o vídeo pitch de 5 minutos
+- [ ] **UI-03**: Painel analítico com KPIs da competição, inspeção de eventos e alerta visual proeminente de amostra reduzida para mapas com menos de 10 partidas ($N < 10$: Breeze e Pearl)
+- [ ] **UI-04**: Documentação técnica completa no README.md com instruções de execução 100% offline, fontes de calibração e roteiro estruturado para o vídeo pitch de 5 minutos até 23/10/2026
 
 ## v2 Requirements
 
@@ -49,7 +49,7 @@ Explicitly excluded. Documented to prevent scope creep.
 |---------|--------|
 | Banco de dados SQLite / DuckDB | Usuário optou estritamente por pandas + Parquet/JSON pela simplicidade e velocidade |
 | Frontend em React / Next.js / Deck.gl | Substituído por Streamlit + Plotly para garantir entrega de alta qualidade dentro do prazo |
-| Chamadas a APIs web externas em runtime | Regra obrigatória do hackathon: apenas dados de partidas dos JSONs locais |
+| Chamadas a APIs web externas em runtime | Regra obrigatória do hackathon: execução 100% offline, apenas dados de partidas dos JSONs locais |
 | Suporte a streaming em tempo real / WebSockets | O escopo do projeto é focado no lote de partidas do torneio fornecido |
 
 ## Traceability
@@ -78,4 +78,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-10-21*
-*Last updated: 2026-10-21 after initial definition*
+*Last updated: 2026-10-21 after map prioritization alignment*
