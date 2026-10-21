@@ -2,7 +2,7 @@
 ### HACKATHON Valorant • Equipe Cão
 
 <p align="center">
-  <img width="600" alt="Equipe Cão Banner" src="https://github.com/user-attachments/assets/2d8ca820-ed77-45b7-85a0-f4a1578591f2" />
+ <img width="1024" height="1024" alt="e1f07474-7807-4442-8c3c-1ed9a1c57cb5" src="https://github.com/user-attachments/assets/08c58ad7-f22b-443b-9f5c-60f4da478233" />
 </p>
 
 Plataforma analítica e visual para exploração geoespacial e temporal de eventos de partidas competitivas de VALORANT, desenvolvida para o Hackathon de Análise de Partidas Universitárias.
