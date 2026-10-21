@@ -9,8 +9,13 @@ from src.ingestion.loader import MatchLoader
 from src.models.match import Match
 
 
+def _get_raw_match_files():
+    all_files = glob.glob("data/**/*.json", recursive=True)
+    return [f for f in all_files if "processed" not in Path(f).parts]
+
+
 def test_load_match_real_file():
-    files = glob.glob("data/**/*.json", recursive=True)
+    files = _get_raw_match_files()
     assert len(files) > 0
 
     loader = MatchLoader()
@@ -35,7 +40,7 @@ def test_load_corrupted_file_error_boundary(tmp_path):
 
 
 def test_extract_kill_events():
-    files = glob.glob("data/**/*.json", recursive=True)
+    files = _get_raw_match_files()
     loader = MatchLoader()
     match = loader.load_match_file(files[0])
     assert match is not None

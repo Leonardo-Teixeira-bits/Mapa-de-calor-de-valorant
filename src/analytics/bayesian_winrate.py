@@ -14,7 +14,8 @@ def compute_bayesian_winrate_grid(
     win_col: str = "killer_won_round",
     grid_size: int = 100,
     prior_weight: float = 5.0,
-    smooth_sigma: float = 1.8
+    smooth_sigma: float = 1.8,
+    global_prior_mean: Optional[float] = 0.5
 ) -> np.ndarray:
     """
     Computes a spatially regularized winrate map using a Bayesian Beta prior:
@@ -22,12 +23,12 @@ def compute_bayesian_winrate_grid(
         P_hat(Win | x, y) = (Wins_smooth(x, y) + alpha_0) / (Total_smooth(x, y) + alpha_0 + beta_0)
     
     where:
-        - alpha_0 = global_winrate * prior_weight
-        - beta_0  = (1 - global_winrate) * prior_weight
+        - alpha_0 = global_prior_mean * prior_weight
+        - beta_0  = (1 - global_prior_mean) * prior_weight
         - Wins_smooth and Total_smooth are 2D Gaussian filtered counts.
         
     This eliminates sharp 0% or 100% artifacts in cells with sparse data,
-    reverting naturally to the global baseline when unobserved.
+    reverting naturally to the global baseline (default 0.5) when unobserved.
     """
     valid = df[[x_col, y_col, win_col]].dropna()
     if len(valid) == 0:
@@ -39,15 +40,19 @@ def compute_bayesian_winrate_grid(
     y = valid[y_col].clip(0.0, 1.0).to_numpy()
 
     # Global prior parameters
-    global_mean = float(np.mean(wins)) if len(wins) > 0 else 0.5
-    global_mean = max(0.1, min(0.9, global_mean))  # Safety bound
-    alpha_0 = global_mean * prior_weight
-    beta_0 = (1.0 - global_mean) * prior_weight
+    if global_prior_mean is not None:
+        mean_val = max(0.1, min(0.9, float(global_prior_mean)))
+    else:
+        mean_val = float(np.mean(wins)) if len(wins) > 0 else 0.5
+        mean_val = max(0.1, min(0.9, mean_val))
 
-    # Discretize onto grid
-    # Bin indices in [0, grid_size - 1]
-    x_bins = np.clip((x * (grid_size - 1)).astype(int), 0, grid_size - 1)
-    y_bins = np.clip((y * (grid_size - 1)).astype(int), 0, grid_size - 1)
+    alpha_0 = mean_val * prior_weight
+    beta_0 = (1.0 - mean_val) * prior_weight
+
+    # Discretize onto grid matching standard histogram binning:
+    # Bin index = floor(coord * grid_size), clipped to [0, grid_size - 1]
+    x_bins = np.clip(np.floor(x * grid_size).astype(int), 0, grid_size - 1)
+    y_bins = np.clip(np.floor(y * grid_size).astype(int), 0, grid_size - 1)
 
     total_grid = np.zeros((grid_size, grid_size), dtype=float)
     wins_grid = np.zeros((grid_size, grid_size), dtype=float)
