@@ -6,7 +6,24 @@ import subprocess
 from pathlib import Path
 
 
+def ensure_data_ready():
+    project_root = Path(__file__).resolve().parent
+    processed_dir = project_root / "data" / "processed"
+    events_path = processed_dir / "processed_events.parquet"
+    zip_path = project_root / "data.zip"
+
+    if (not processed_dir.exists() or not events_path.exists()) and zip_path.exists():
+        print("=" * 60)
+        print("  Detectado data.zip! Extraindo base de dados e artefatos...")
+        import zipfile
+        with zipfile.ZipFile(zip_path, "r") as z:
+            z.extractall(project_root)
+        print("  Dados descompactados com sucesso na pasta data/.")
+        print("=" * 60)
+
+
 def main():
+    ensure_data_ready()
     app_path = Path(__file__).resolve().parent / "app.py"
     cmd = [
         sys.executable,

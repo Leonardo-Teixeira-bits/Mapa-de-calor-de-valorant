@@ -67,6 +67,13 @@ Progress: [██████████] 100%
 - [Scope]: Execução 100% offline com minimapas oficiais locais armazenados em `assets/maps/`
 - [Phase 2]: Renderização Plotly sobrepondo heatmap em eixos normalizados com minimapa em layer inferior
 - [Delivery]: Script `run_app.py`, `requirements.txt` e roteiro de pitch de 5 minutos adicionados ao `README.md`
+- [Offline Data]: Inclusão de data.zip (~13.4MB) no repositório com auto-extração para testes 100% autônomos sem dados externos
+
+## Quick Tasks Completed
+
+| Task | Date | Status | Description |
+|------|------|--------|-------------|
+| quick-add-data-zip | 2026-10-21 | complete ✓ | Inclusão do data.zip no repo, suporte a auto-extração e atualização do README.md |
 
 ### Pending Todos
 

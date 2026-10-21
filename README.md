@@ -24,20 +24,41 @@ A aplicação foi projetada para operar em modo estritamente **offline**, sem ne
 pip install -r requirements.txt
 ```
 
-### 3. Execução do Pipeline de Dados
+### 3. Base de Dados Inclusa e Testes Imediatos (`data.zip`)
+Para permitir que qualquer avaliador teste a aplicação imediatamente **sem necessidade de baixar arquivos de fontes externas**, o repositório já inclui na raiz o arquivo compactado **`data.zip`** (~13 MB). Ele contém:
+* Os artefatos pré-calculados (`data/processed/`) para abertura instantânea do dashboard.
+* Todas as 336 partidas reais em JSON distribuídas nas pastas de torneios: `Rush Series Esquenta`, `Rush Series Esquenta 2`, `Rush Series Inclusivo` e `Univavá`.
+
+> **Descompactação Automática:** Os scripts `run_app.py`, `app.py` e `src/pipeline.py` detectam e extraem automaticamente o `data.zip` caso a pasta `data/processed/` ainda não exista no ambiente.
+
+Caso queira descompactar manualmente via linha de comando:
+* **Windows (PowerShell):**
+  ```powershell
+  Expand-Archive -Path data.zip -DestinationPath . -Force
+  ```
+* **Linux / macOS:**
+  ```bash
+  unzip -o data.zip
+  ```
+* **Python (Multiplataforma):**
+  ```bash
+  python -m zipfile -e data.zip .
+  ```
+
+### 4. Execução do Pipeline de Dados (Opcional - Recomputação)
 Processa os JSONs brutos da pasta `data/`, calcula as projeções e matrizes espaciais e exporta os artefatos otimizados para `data/processed/` (~12 segundos):
 ```bash
 python src/pipeline.py
 ```
 
-### 4. Inicialização do Dashboard Web
+### 5. Inicialização do Dashboard Web
 Inicia o dashboard interativo no navegador:
 ```bash
 python run_app.py
 ```
 *(Ou alternativamente: `streamlit run app.py`)*
 
-### 5. Execução da Suíte de Testes
+### 6. Execução da Suíte de Testes
 ```bash
 python -m pytest -v
 ```
@@ -90,11 +111,16 @@ Os mapas são agrupados em 3 níveis no dashboard:
 │   └── maps.json               # Parâmetros de calibração espacial de todos os mapas
 ├── assets/
 │   └── maps/                   # Imagens oficiais dos minimapas em alta resolução
-├── data/
+├── data.zip                    # Pacote de dados compactado (~13MB, matches brutos + processados)
+├── data/                       # Diretório de dados (extraído a partir de data.zip)
 │   ├── processed/              # Artefatos gerados pelo pipeline
 │   │   ├── processed_events.parquet    # Base colunar de 46.753 abates (snappy)
 │   │   ├── density_winrate_cache.json  # Caches espaciais 100x100 pré-calculados
 │   │   └── maps_summary.json           # Resumo de partidas, rounds, kills e tiers
+│   ├── Rush Series Esquenta/   # JSONs brutos do torneio Rush Series Esquenta
+│   ├── Rush Series Esquenta 2/ # JSONs brutos do torneio Rush Series Esquenta 2
+│   ├── Rush Series Inclusivo/  # JSONs brutos do torneio Rush Series Inclusivo
+│   └── Univavá/                # JSONs brutos das etapas classificatórias da UNIVAVA
 ├── src/
 │   ├── ingestion/              # Ingestão em lote e tolerância a falhas (Pydantic v2)
 │   ├── models/                 # Schemas tipados de Partida, Round e Abates
