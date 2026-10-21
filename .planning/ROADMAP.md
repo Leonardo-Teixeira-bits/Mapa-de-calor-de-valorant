@@ -7,7 +7,7 @@ Desenvolvimento enxuto de uma plataforma analítica geoespacial de ponta a ponta
 ## Phases
 
 - [x] **Phase 1: Pipeline de Dados, Projeção Multi-Mapa e Estatística Bayesiana** - Ingestão de partidas, validação prioritária de projeção e KDE Bayesiano no trio Ascent, Lotus e Haven (72%), extensão para os demais mapas e exportação colunar Parquet/JSON 100% offline. (Concluída em 2026-10-21)
-- [ ] **Phase 2: Dashboard Interativo em Streamlit + Plotly e Pacote de Pitch** - Interface analítica completa com mapas Plotly, alternância de modos (Abates, Mortes, Vantagem), destaque para mapas prioritários, alerta de amostra reduzida ($N < 10$) e guia para vídeo pitch.
+- [x] **Phase 2: Dashboard Interativo em Streamlit + Plotly e Pacote de Pitch** - Interface analítica completa com mapas Plotly, alternância de modos (Abates, Mortes, Vantagem), destaque para mapas prioritários, alerta de amostra reduzida ($N < 10$) e guia para vídeo pitch. (Concluída em 2026-10-21)
 
 ## Phase Details
 
@@ -50,8 +50,16 @@ Plans:
   4. Painel analítico exibe KPIs globais do torneio (volume de abates, rounds e balanceamento de mapa) e tabela de eventos detalhados.
   5. README.md fornece instruções reproduzíveis de execução 100% offline, detalhamento da calibração e guia estruturado para o vídeo pitch de 5 minutos até o prazo de 23/10/2026.
 
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 2 plans
+
+Plans:
+**Wave 1**
+
+- [x] 02-01: Componentes de visualização Plotly e aplicação interativa Streamlit com filtros multi-tier
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [x] 02-02: Documentação técnica no README.md, roteiro do pitch de 5 minutos e script facilitador run_app.py
 
 ## Progress
 
@@ -61,4 +69,4 @@ Phases execute in numeric order: 1 → 2
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Pipeline de Dados, Projeção Multi-Mapa e Estatística Bayesiana | 2/2 | Complete | 2026-10-21 |
-| 2. Dashboard Interativo em Streamlit + Plotly e Pacote de Pitch | 0/TBD | Not started | - |
+| 2. Dashboard Interativo em Streamlit + Plotly e Pacote de Pitch | 2/2 | Complete | 2026-10-21 |
