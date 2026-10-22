@@ -82,14 +82,20 @@ Cada round possui duração variável em função de desarmes ou eliminações a
 * **Fim (Late):** $t \ge \frac{2}{3} \cdot T_{\text{round}}$ (Situações de pós-plant, desarmes e retakes sob pressão)
 
 ### 3. Vantagem Territorial com Regularização Bayesiana
-Em células da grade espacial com poucas amostras (ex: 1 abate e 1 vitória), a taxa de vitória empírica não-regularizada atingiria falsos 100%. Para eliminar esse viés, aplicamos uma suavização espacial gaussiana seguida de um **Beta prior bayesiano** centrado na probabilidade neutra do jogo ($\mu_{\text{global}} = 0.5$):
+Em células da grade espacial com poucas amostras (ex: 1 abate e 1 vitória), a taxa de vitória empírica não-regularizada atingiria falsos 100%. Para eliminar esse viés, aplicamos uma suavização espacial gaussiana seguida de um **Beta prior bayesiano** centrado na probabilidade neutra do jogo (`μ_global = 0.5`):
+
+```text
+                  Wins_smooth(x, y) + α₀
+P̂(Win | x, y) = ──────────────────────────────────
+                Total_smooth(x, y) + α₀ + β₀
+```
 
 $$\hat{P}(\text{Win} \mid x, y) = \frac{\text{Wins}_{\text{smooth}}(x, y) + \alpha_0}{\text{Total}_{\text{smooth}}(x, y) + \alpha_0 + \beta_0}$$
 
-onde:
-* $\alpha_0 = \mu_{\text{global}} \times \text{prior\_weight} = 0.5 \times 5.0 = 2.5$
-* $\beta_0 = (1.0 - \mu_{\text{global}}) \times \text{prior\_weight} = 0.5 \times 5.0 = 2.5$
-* $\text{Wins}_{\text{smooth}}$ e $\text{Total}_{\text{smooth}}$ resultam de filtro gaussiano 2D com $\sigma = 1.8$.
+**Onde:**
+* **α₀** = `μ_global × prior_weight = 0.5 × 5.0 = 2.5`
+* **β₀** = `(1.0 - μ_global) × prior_weight = 0.5 × 5.0 = 2.5`
+* **Wins_smooth** e **Total_smooth** resultam da aplicação de filtro gaussiano 2D com `σ = 1.8`.
 
 Células não observadas permanecem no baseline neutro de 50%, enquanto regiões de alto tráfego convergem para sua taxa real empírica.
 
@@ -98,6 +104,9 @@ Os mapas são agrupados em 3 níveis no dashboard:
 * **Tier 1 (MVP Competitivo):** **Ascent** (86 jogos), **Lotus** (82 jogos) e **Haven** (75 jogos). Somam **243 partidas e 33.497 abates (71.6% do dataset)**, validados prioritariamente com máxima densidade estatística.
 * **Tier 2 (Mapas Estendidos):** **Split** (36 jogos), **Sunset** (24 jogos), **Abyss** (13 jogos), **Summit** (10 jogos).
 * **Tier 3 (Amostra Reduzida - $N < 10$):** **Breeze** (5 jogos), **Pearl** (3 jogos), **Fracture** (2 jogos). Exibem aviso explícito de confiabilidade amostral limitada no dashboard (`low_sample_warning = True`).
+
+### 5. Resolução Amigável de Itens e Armas de Abate
+Os identificadores originais de telemetria da Unreal Engine (GUIDs/UUIDs) como `9C82E19D-4575-0200-1A81-3EACF00CF872` são traduzidos automaticamente para os nomes oficiais do arsenal (ex: **Vandal**, **Phantom**, **Operator**, **Classic**, **Sheriff**, **Outlaw**) e categorias de dano (Habilidades Q/C/E/X, Spike, Faca e Queda) utilizando o módulo `src/transformers/weapons.py` com dicionário estático offline.
 
 ---
 
@@ -108,7 +117,9 @@ Os mapas são agrupados em 3 níveis no dashboard:
 ├── run_app.py                  # Script launcher facilitado
 ├── requirements.txt            # Dependências do projeto
 ├── config/
-│   └── maps.json               # Parâmetros de calibração espacial de todos os mapas
+│   ├── maps.json               # Parâmetros de calibração espacial de todos os mapas
+│   ├── weapons.json            # Catálogo oficial de armas do ecossistema VALORANT
+│   └── weapons_map.json        # Mapeamento indexado UUID -> Nome Amigável de Arma
 ├── assets/
 │   └── maps/                   # Imagens oficiais dos minimapas em alta resolução
 ├── data.zip                    # Pacote de dados compactado (~13MB, matches brutos + processados)
@@ -124,12 +135,12 @@ Os mapas são agrupados em 3 níveis no dashboard:
 ├── src/
 │   ├── ingestion/              # Ingestão em lote e tolerância a falhas (Pydantic v2)
 │   ├── models/                 # Schemas tipados de Partida, Round e Abates
-│   ├── transformers/           # Projeção de coordenadas e segmentador temporal
+│   ├── transformers/           # Projeção, segmentador temporal e resolvedor de armas
 │   ├── analytics/              # Densidade espacial e Winrate Bayesiano
 │   ├── exporter/               # Exportador Parquet e gerador de caches
 │   ├── visualization/          # Renderizador geoespacial Plotly sobre minimapas
 │   └── pipeline.py             # Orquestrador de ponta a ponta
-└── tests/                      # Suíte de 23 testes unitários e de integração
+└── tests/                      # Suíte de 26 testes unitários e de integração
 ```
 
 ---

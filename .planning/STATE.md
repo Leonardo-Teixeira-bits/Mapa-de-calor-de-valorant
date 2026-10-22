@@ -74,6 +74,7 @@ Progress: [██████████] 100%
 | Task | Date | Status | Description |
 |------|------|--------|-------------|
 | quick-add-data-zip | 2026-10-21 | complete ✓ | Inclusão do data.zip no repo, suporte a auto-extração e atualização do README.md |
+| valorant-ui-and-weapon-mapping | 2026-10-22 | complete ✓ | Alinhamento visual ao VALORANT.html (cores/fontes) e resolução de UUIDs de armas/itens |
 
 ### Pending Todos
 

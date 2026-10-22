@@ -8,6 +8,7 @@ import pandas as pd
 import streamlit as st
 
 from src.visualization.map_renderer import render_map_figure
+from src.transformers.weapons import format_damage_events
 
 # Project paths
 PROCESSED_DIR = Path(__file__).resolve().parent / "data" / "processed"
@@ -22,57 +23,133 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom VALORANT Dark Theme CSS
+# Custom VALORANT Dark Theme CSS with Typography & Colors from VALORANT.html
 st.markdown("""
 <style>
-    .reportview-container, .main, .block-container {
-        background-color: #0F1923;
-        color: #ECE8E1;
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
+
+    /* Global Body and Container Styling */
+    html, body, [class*="css"], .reportview-container, .main, .block-container {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: #0F1923 !important;
+        color: #ECE8E1 !important;
     }
-    .stMetric {
-        background-color: #1F2733;
-        border-radius: 8px;
-        padding: 12px 16px;
-        border-left: 4px solid #FF4655;
+
+    /* Headings with VALORANT Tungsten / Bold Condensed Aesthetic */
+    h1, h2, h3, .valorant-title {
+        font-family: 'Bebas Neue', 'Oswald', sans-serif !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        color: #ECE8E1 !important;
+        font-weight: 700 !important;
     }
-    .stMetric label {
+
+    h1 {
+        font-size: 2.6rem !important;
+        border-left: 5px solid #FF4655;
+        padding-left: 14px;
+        margin-bottom: 0.3rem !important;
+    }
+
+    h2, h3 {
+        font-size: 1.45rem !important;
+        letter-spacing: 0.06em !important;
+    }
+
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #111822 !important;
+        border-right: 1px solid rgba(236, 232, 225, 0.08);
+    }
+
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3 {
+        font-family: 'Bebas Neue', 'Oswald', sans-serif !important;
+        letter-spacing: 0.06em !important;
+        color: #ECE8E1 !important;
+    }
+
+    /* HUD-Style Metric Cards */
+    div[data-testid="stMetric"] {
+        background: linear-gradient(135deg, #18222C 0%, #111822 100%) !important;
+        border: 1px solid rgba(236, 232, 225, 0.12) !important;
+        border-radius: 4px !important;
+        padding: 14px 18px !important;
+        border-left: 4px solid #FF4655 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 70, 85, 0.4) !important;
+    }
+
+    div[data-testid="stMetric"] label {
+        font-family: 'Rajdhani', sans-serif !important;
         color: #8B978F !important;
         font-size: 0.85rem !important;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
     }
-    .stMetric div[data-testid="stMetricValue"] {
+
+    div[data-testid="stMetricValue"] {
+        font-family: 'Bebas Neue', 'Oswald', sans-serif !important;
         color: #ECE8E1 !important;
-        font-size: 1.8rem !important;
-        font-weight: 700;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.04em !important;
     }
+
+    /* VALORANT Tier Badges */
     .tier-badge-1 {
+        display: inline-block;
         background-color: #00F5D4;
         color: #0F1923;
-        padding: 4px 10px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 2px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
+
     .tier-badge-2 {
+        display: inline-block;
         background-color: #FFB703;
         color: #0F1923;
-        padding: 4px 10px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 2px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
+
     .tier-badge-3 {
+        display: inline-block;
         background-color: #FF4655;
         color: #FFFFFF;
-        padding: 4px 10px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 2px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
-    .sidebar .sidebar-content {
-        background-color: #171E27;
+
+    /* Tactical Box */
+    .tactical-box {
+        background-color: #18222C;
+        border: 1px solid rgba(236, 232, 225, 0.1);
+        border-radius: 4px;
+        padding: 16px;
+        margin-top: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -267,23 +344,23 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
 
     with insights_col:
-        st.subheader(" Inteligência Tática & Leitura")
+        st.subheader("Inteligência Tática & Leitura")
 
         if selected_mode == "kills":
             st.markdown("""
-            ** Mapa de Densidade de Abates:**
+            **Mapa de Densidade de Abates:**
             * Exibe as posições geográficas exatas onde os **atacantes efetuaram as eliminações**.
             * Concentrações intensas revelam os ângulos mais favoráveis para troca de dano (*first engagements* e *crossfires*).
             """)
         elif selected_mode == "deaths":
             st.markdown("""
-            ** Mapa de Densidade de Mortes:**
+            **Mapa de Densidade de Mortes:**
             * Mapeia os locais onde os **jogadores foram eliminados**.
             * Zonas quentes indicam gargalos (*chokepoints*), áreas de penetração vulneráveis a utilitários e linhas de tiro desfavoráveis.
             """)
         else:
             st.markdown("""
-            ** Superfície de Vantagem Territorial (Winrate Bayesiano):**
+            **Superfície de Vantagem Territorial (Winrate Bayesiano):**
             * Calcula a probabilidade condicionada de vitória do round com base na posição do abate: $\\hat{P}(\\text{Win} \\mid x, y)$.
             * **Regularização Bayesiana (Beta Prior):** Regiões com amostras isoladas convergem suavemente para 50%, prevenindo picos espúrios de 100%.
             * **Azul Escuro:** Controle territorial com vantagem decisiva ($> 60\\%$ de conversão).
@@ -301,25 +378,41 @@ def main():
         else:
             st.caption("Visão agregada consolidando todos os confrontos da partida.")
 
-    # Detailed Events Inspection Table
-    with st.expander(" Inspecionar Registros de Abates Detalhados"):
+    # Detailed Events Inspection Table with Friendly Weapon Names
+    with st.expander("Inspecionar Registros de Abates Detalhados"):
         if not filtered_events.empty:
+            # Resolve weapon and item names
+            enriched_events = format_damage_events(filtered_events)
+
             display_cols = [
                 "round_num", "round_phase", "round_time_ms",
-                "damage_item", "killer_team", "victim_team", "killer_won_round"
+                "weapon_name", "killer_team", "victim_team", "killer_won_round"
             ]
-            avail_cols = [c for c in display_cols if c in filtered_events.columns]
-            table_df = filtered_events[avail_cols].copy()
+            avail_cols = [c for c in display_cols if c in enriched_events.columns]
+            table_df = enriched_events[avail_cols].copy()
+
+            rename_map = {}
+            if "round_num" in table_df:
+                rename_map["round_num"] = "Round"
+            if "round_phase" in table_df:
+                rename_map["round_phase"] = "Fase"
             if "round_time_ms" in table_df:
                 table_df["Time (sec.)"] = (table_df["round_time_ms"] / 1000).round(1)
                 table_df.drop(columns=["round_time_ms"], inplace=True)
+            if "weapon_name" in table_df:
+                rename_map["weapon_name"] = "Arma / Item"
+            if "killer_team" in table_df:
+                rename_map["killer_team"] = "Time Atacante"
+            if "victim_team" in table_df:
+                rename_map["victim_team"] = "Time Vítima"
             if "killer_won_round" in table_df:
-                table_df["Winner"] = table_df["killer_won_round"].apply(
-                    lambda w: "attacker" if w is True else "defender" if w is False else "indeterminate"
+                table_df["Vencedor"] = table_df["killer_won_round"].apply(
+                    lambda w: "Atacante" if w is True else "Defensor" if w is False else "Indeterminado"
                 )
                 table_df.drop(columns=["killer_won_round"], inplace=True)
 
-            st.dataframe(table_df.head(200), use_container_width=True)
+            table_df.rename(columns=rename_map, inplace=True)
+            st.dataframe(table_df.head(250), use_container_width=True)
         else:
             st.info("Nenhum evento registrado para o filtro atual.")
 
