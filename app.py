@@ -18,7 +18,6 @@ EVENTS_PATH = PROCESSED_DIR / "processed_events.parquet"
 # Page configuration
 st.set_page_config(
     page_title="VALORANT GeoAnalytics | UNIVAVA",
-    page_icon="🎯",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -131,15 +130,15 @@ def main():
     # Map selection options with visual indicators
     map_options = []
     for m in tier1_maps:
-        map_options.append((m, f"⭐ {m} (Tier 1 MVP - {summary[m]['matches_count']} partidas)"))
+        map_options.append((m, f" {m} (Tier 1 MVP - {summary[m]['matches_count']} partidas)"))
     for m in tier2_maps:
-        map_options.append((m, f"🗺️ {m} (Tier 2 - {summary[m]['matches_count']} partidas)"))
+        map_options.append((m, f" {m} (Tier 2 - {summary[m]['matches_count']} partidas)"))
     for m in tier3_maps:
-        map_options.append((m, f"⚠️ {m} (Tier 3 - Amostra reduzida: {summary[m]['matches_count']} jogos)"))
+        map_options.append((m, f" {m} (Tier 3 - Amostra reduzida: {summary[m]['matches_count']} jogos)"))
 
     # Sidebar Controls
     st.sidebar.image(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Valorant_logo_-_pink_color_version.svg/1200px-Valorant_logo_-_pink_color_version.svg.png",
+        "https://logopng.com.br/logos/valorant-192.svg?dpl=dpl_83xWKUBiCCc88zqvgK1XNSG8JXgj",
         width=50
     )
     st.sidebar.title("VALORANT Analytics")
@@ -159,9 +158,9 @@ def main():
     mode_choice = st.sidebar.radio(
         "Visualização Geoespacial:",
         [
-            ("kills", "🔥 Mapa de Abates (Kills - Atacante)"),
-            ("deaths", "💀 Mapa de Mortes (Deaths - Vítima)"),
-            ("winrate", "⚖️ Vantagem Territorial (Winrate Bayesiano)")
+            ("kills", " Mapa de Abates (Kills - Atacante)"),
+            ("deaths", " Mapa de Mortes (Deaths - Vítima)"),
+            ("winrate", " Vantagem Territorial (Winrate Bayesiano)")
         ],
         format_func=lambda x: x[1]
     )
@@ -171,7 +170,7 @@ def main():
     phase_choice = st.sidebar.selectbox(
         "Fase do Round:",
         [
-            ("Total", "⏱️ Round Completo (Total)"),
+            ("Total", "⏱ Round Completo (Total)"),
             ("Early", "🟢 Início (0 - 33% da duração)"),
             ("Mid", "🟡 Meio (33% - 66% da duração)"),
             ("Late", "🔴 Fim / Pós-Plant (66% - 100%)")
@@ -268,23 +267,23 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
 
     with insights_col:
-        st.subheader("💡 Inteligência Tática & Leitura")
+        st.subheader(" Inteligência Tática & Leitura")
 
         if selected_mode == "kills":
             st.markdown("""
-            **🔥 Mapa de Densidade de Abates:**
+            ** Mapa de Densidade de Abates:**
             * Exibe as posições geográficas exatas onde os **atacantes efetuaram as eliminações**.
             * Concentrações intensas revelam os ângulos mais favoráveis para troca de dano (*first engagements* e *crossfires*).
             """)
         elif selected_mode == "deaths":
             st.markdown("""
-            **💀 Mapa de Densidade de Mortes:**
+            ** Mapa de Densidade de Mortes:**
             * Mapeia os locais onde os **jogadores foram eliminados**.
             * Zonas quentes indicam gargalos (*chokepoints*), áreas de penetração vulneráveis a utilitários e linhas de tiro desfavoráveis.
             """)
         else:
             st.markdown("""
-            **⚖️ Superfície de Vantagem Territorial (Winrate Bayesiano):**
+            ** Superfície de Vantagem Territorial (Winrate Bayesiano):**
             * Calcula a probabilidade condicionada de vitória do round com base na posição do abate: $\\hat{P}(\\text{Win} \\mid x, y)$.
             * **Regularização Bayesiana (Beta Prior):** Regiões com amostras isoladas convergem suavemente para 50%, prevenindo picos espúrios de 100%.
             * **Azul Escuro:** Controle territorial com vantagem decisiva ($> 60\\%$ de conversão).
@@ -303,7 +302,7 @@ def main():
             st.caption("Visão agregada consolidando todos os confrontos da partida.")
 
     # Detailed Events Inspection Table
-    with st.expander("🔍 Inspecionar Registros de Abates Detalhados"):
+    with st.expander(" Inspecionar Registros de Abates Detalhados"):
         if not filtered_events.empty:
             display_cols = [
                 "round_num", "round_phase", "round_time_ms",
@@ -312,11 +311,11 @@ def main():
             avail_cols = [c for c in display_cols if c in filtered_events.columns]
             table_df = filtered_events[avail_cols].copy()
             if "round_time_ms" in table_df:
-                table_df["Tempo (s)"] = (table_df["round_time_ms"] / 1000).round(1)
+                table_df["Time (sec.)"] = (table_df["round_time_ms"] / 1000).round(1)
                 table_df.drop(columns=["round_time_ms"], inplace=True)
             if "killer_won_round" in table_df:
-                table_df["Vencedor"] = table_df["killer_won_round"].apply(
-                    lambda w: "Atacante" if w is True else "Vítima" if w is False else "Indeterminado"
+                table_df["Winner"] = table_df["killer_won_round"].apply(
+                    lambda w: "attacker" if w is True else "defender" if w is False else "indeterminate"
                 )
                 table_df.drop(columns=["killer_won_round"], inplace=True)
 
