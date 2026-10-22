@@ -136,6 +136,23 @@ def render_map_figure(
 
         colors = ["#00F5D4" if w is True else "#FF0055" if w is False else "#FEE440" for w in color_col]
 
+        weapon_labels = None
+        if "weapon_name" in points_df.columns:
+            weapon_labels = points_df.loc[px.index, "weapon_name"].tolist()
+        elif "damage_item" in points_df.columns:
+            from src.transformers.weapons import resolve_damage_item_name
+            dtypes = points_df.loc[px.index, "damage_type"].tolist() if "damage_type" in points_df.columns else [None] * len(px)
+            weapon_labels = [resolve_damage_item_name(it, dt) for it, dt in zip(points_df.loc[px.index, "damage_item"], dtypes)]
+
+        hover_texts = []
+        for i, (r, p, w) in enumerate(zip(
+            points_df.loc[px.index, "round_num"],
+            points_df.loc[px.index, "round_phase"],
+            color_col
+        )):
+            wp_part = f"<br>Arma: {weapon_labels[i]}" if weapon_labels and i < len(weapon_labels) else ""
+            hover_texts.append(f"Round: {r}<br>Fase: {p}{wp_part}<br>Resultado: {'Vitória' if w else 'Derrota'}")
+
         fig.add_trace(
             go.Scatter(
                 x=px,
@@ -147,14 +164,7 @@ def render_map_figure(
                     opacity=0.8,
                     line=dict(width=0.5, color="#111111")
                 ),
-                text=[
-                    f"Round: {r}<br>Fase: {p}<br>Resultado: {'Vitória' if w else 'Derrota'}"
-                    for r, p, w in zip(
-                        points_df.loc[px.index, "round_num"],
-                        points_df.loc[px.index, "round_phase"],
-                        color_col
-                    )
-                ],
+                text=hover_texts,
                 hoverinfo="text",
                 name="Eventos de Abate"
             )

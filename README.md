@@ -105,6 +105,9 @@ Os mapas são agrupados em 3 níveis no dashboard:
 * **Tier 2 (Mapas Estendidos):** **Split** (36 jogos), **Sunset** (24 jogos), **Abyss** (13 jogos), **Summit** (10 jogos).
 * **Tier 3 (Amostra Reduzida - $N < 10$):** **Breeze** (5 jogos), **Pearl** (3 jogos), **Fracture** (2 jogos). Exibem aviso explícito de confiabilidade amostral limitada no dashboard (`low_sample_warning = True`).
 
+### 5. Resolução Amigável de Itens e Armas de Abate
+Os identificadores originais de telemetria da Unreal Engine (GUIDs/UUIDs) como `9C82E19D-4575-0200-1A81-3EACF00CF872` são traduzidos automaticamente para os nomes oficiais do arsenal (ex: **Vandal**, **Phantom**, **Operator**, **Classic**, **Sheriff**, **Outlaw**) e categorias de dano (Habilidades Q/C/E/X, Spike, Faca e Queda) utilizando o módulo `src/transformers/weapons.py` com dicionário estático offline.
+
 ---
 
 ##  Estrutura do Projeto
@@ -114,7 +117,9 @@ Os mapas são agrupados em 3 níveis no dashboard:
 ├── run_app.py                  # Script launcher facilitado
 ├── requirements.txt            # Dependências do projeto
 ├── config/
-│   └── maps.json               # Parâmetros de calibração espacial de todos os mapas
+│   ├── maps.json               # Parâmetros de calibração espacial de todos os mapas
+│   ├── weapons.json            # Catálogo oficial de armas do ecossistema VALORANT
+│   └── weapons_map.json        # Mapeamento indexado UUID -> Nome Amigável de Arma
 ├── assets/
 │   └── maps/                   # Imagens oficiais dos minimapas em alta resolução
 ├── data.zip                    # Pacote de dados compactado (~13MB, matches brutos + processados)
@@ -130,12 +135,12 @@ Os mapas são agrupados em 3 níveis no dashboard:
 ├── src/
 │   ├── ingestion/              # Ingestão em lote e tolerância a falhas (Pydantic v2)
 │   ├── models/                 # Schemas tipados de Partida, Round e Abates
-│   ├── transformers/           # Projeção de coordenadas e segmentador temporal
+│   ├── transformers/           # Projeção, segmentador temporal e resolvedor de armas
 │   ├── analytics/              # Densidade espacial e Winrate Bayesiano
 │   ├── exporter/               # Exportador Parquet e gerador de caches
 │   ├── visualization/          # Renderizador geoespacial Plotly sobre minimapas
 │   └── pipeline.py             # Orquestrador de ponta a ponta
-└── tests/                      # Suíte de 23 testes unitários e de integração
+└── tests/                      # Suíte de 26 testes unitários e de integração
 ```
 
 ---
