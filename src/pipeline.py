@@ -60,11 +60,20 @@ class MatchProcessingPipeline:
 
     def discover_match_files(self) -> List[Path]:
         """Finds all JSON match files recursively within data_dir, excluding output_dir."""
+        # Auto-extract data.zip if data directory is missing
+        if not self.data_dir.exists() and Path("data.zip").exists():
+            import zipfile
+            logger.info("Extracting data.zip into repository root...")
+            with zipfile.ZipFile("data.zip", "r") as z:
+                z.extractall(".")
+
         if not self.data_dir.exists():
             return []
         output_abs = self.output_dir.resolve()
         discovered = []
         for f in self.data_dir.rglob("*.json"):
+            if not f.is_file():
+                continue
             try:
                 if f.resolve().is_relative_to(output_abs):
                     continue

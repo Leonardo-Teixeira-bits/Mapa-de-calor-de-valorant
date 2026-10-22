@@ -102,7 +102,16 @@ def load_events_df() -> pd.DataFrame:
     return pd.read_parquet(EVENTS_PATH)
 
 
+def ensure_data_extracted():
+    zip_path = Path(__file__).resolve().parent / "data.zip"
+    if (not SUMMARY_PATH.exists() or not EVENTS_PATH.exists()) and zip_path.exists():
+        import zipfile
+        with zipfile.ZipFile(zip_path, "r") as z:
+            z.extractall(Path(__file__).resolve().parent)
+
+
 def main():
+    ensure_data_extracted()
     summary = load_maps_summary()
     cache = load_density_cache()
     events_df = load_events_df()

@@ -3,26 +3,27 @@
 from __future__ import annotations
 import sys
 import subprocess
-import zipfile
 from pathlib import Path
 
 
-def ensure_data_extracted():
-    """Extracts data.zip automatically if data/processed is missing."""
-    root = Path(__file__).resolve().parent
-    processed_summary = root / "data" / "processed" / "maps_summary.json"
-    zip_path = root / "data.zip"
+def ensure_data_ready():
+    project_root = Path(__file__).resolve().parent
+    processed_dir = project_root / "data" / "processed"
+    events_path = processed_dir / "processed_events.parquet"
+    zip_path = project_root / "data.zip"
 
-    if not processed_summary.exists() and zip_path.exists():
-        print(f"📦 Base processada não encontrada. Extraindo '{zip_path.name}'...")
+    if (not processed_dir.exists() or not events_path.exists()) and zip_path.exists():
+        print("=" * 60)
+        print("  Detectado data.zip! Extraindo base de dados e artefatos...")
+        import zipfile
         with zipfile.ZipFile(zip_path, "r") as z:
-            z.extractall(root)
-        print("✅ Base de dados extraída com sucesso!\n")
+            z.extractall(project_root)
+        print("  Dados descompactados com sucesso na pasta data/.")
+        print("=" * 60)
 
 
 def main():
-    ensure_data_extracted()
-
+    ensure_data_ready()
     app_path = Path(__file__).resolve().parent / "app.py"
     cmd = [
         sys.executable,

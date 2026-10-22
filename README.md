@@ -1,8 +1,8 @@
-# 🎯 Análise Geoespacial de Partidas de VALORANT (UNIVAVA)
+#  Análise Geoespacial de Partidas de VALORANT 
 ### HACKATHON Valorant • Equipe Cão
 
 <p align="center">
-  <img width="600" alt="Equipe Cão Banner" src="https://github.com/user-attachments/assets/2d8ca820-ed77-45b7-85a0-f4a1578591f2" />
+ <img width="1024" height="1024" alt="e1f07474-7807-4442-8c3c-1ed9a1c57cb5" src="https://github.com/user-attachments/assets/08c58ad7-f22b-443b-9f5c-60f4da478233" />
 </p>
 
 Plataforma analítica e visual para exploração geoespacial e temporal de eventos de partidas competitivas de VALORANT, desenvolvida para o Hackathon de Análise de Partidas Universitárias.
@@ -11,7 +11,7 @@ A aplicação processa **336 partidas reais** (5.068 rounds e 46.753 abates), pr
 
 ---
 
-## ⚡ Quickstart (Execução 100% Offline)
+##  Quickstart (Execução 100% Offline)
 
 A aplicação foi projetada para operar em modo estritamente **offline**, sem nenhuma dependência de APIs externas em tempo de execução.
 
@@ -24,20 +24,41 @@ A aplicação foi projetada para operar em modo estritamente **offline**, sem ne
 pip install -r requirements.txt
 ```
 
-### 3. Execução do Pipeline de Dados
+### 3. Base de Dados Inclusa e Testes Imediatos (`data.zip`)
+Para permitir que qualquer avaliador teste a aplicação imediatamente **sem necessidade de baixar arquivos de fontes externas**, o repositório já inclui na raiz o arquivo compactado **`data.zip`** (~13 MB). Ele contém:
+* Os artefatos pré-calculados (`data/processed/`) para abertura instantânea do dashboard.
+* Todas as 336 partidas reais em JSON distribuídas nas pastas de torneios: `Rush Series Esquenta`, `Rush Series Esquenta 2`, `Rush Series Inclusivo` e `Univavá`.
+
+> **Descompactação Automática:** Os scripts `run_app.py`, `app.py` e `src/pipeline.py` detectam e extraem automaticamente o `data.zip` caso a pasta `data/processed/` ainda não exista no ambiente.
+
+Caso queira descompactar manualmente via linha de comando:
+* **Windows (PowerShell):**
+  ```powershell
+  Expand-Archive -Path data.zip -DestinationPath . -Force
+  ```
+* **Linux / macOS:**
+  ```bash
+  unzip -o data.zip
+  ```
+* **Python (Multiplataforma):**
+  ```bash
+  python -m zipfile -e data.zip .
+  ```
+
+### 4. Execução do Pipeline de Dados (Opcional - Recomputação)
 Processa os JSONs brutos da pasta `data/`, calcula as projeções e matrizes espaciais e exporta os artefatos otimizados para `data/processed/` (~12 segundos):
 ```bash
 python src/pipeline.py
 ```
 
-### 4. Inicialização do Dashboard Web
+### 5. Inicialização do Dashboard Web
 Inicia o dashboard interativo no navegador:
 ```bash
 python run_app.py
 ```
 *(Ou alternativamente: `streamlit run app.py`)*
 
-### 5. Execução da Suíte de Testes
+### 6. Execução da Suíte de Testes
 ```bash
 python -m pytest -v
 ```
@@ -80,7 +101,7 @@ Os mapas são agrupados em 3 níveis no dashboard:
 
 ---
 
-## 🏗️ Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 ├── app.py                      # Dashboard interativo Streamlit
@@ -90,11 +111,16 @@ Os mapas são agrupados em 3 níveis no dashboard:
 │   └── maps.json               # Parâmetros de calibração espacial de todos os mapas
 ├── assets/
 │   └── maps/                   # Imagens oficiais dos minimapas em alta resolução
-├── data/
+├── data.zip                    # Pacote de dados compactado (~13MB, matches brutos + processados)
+├── data/                       # Diretório de dados (extraído a partir de data.zip)
 │   ├── processed/              # Artefatos gerados pelo pipeline
 │   │   ├── processed_events.parquet    # Base colunar de 46.753 abates (snappy)
 │   │   ├── density_winrate_cache.json  # Caches espaciais 100x100 pré-calculados
 │   │   └── maps_summary.json           # Resumo de partidas, rounds, kills e tiers
+│   ├── Rush Series Esquenta/   # JSONs brutos do torneio Rush Series Esquenta
+│   ├── Rush Series Esquenta 2/ # JSONs brutos do torneio Rush Series Esquenta 2
+│   ├── Rush Series Inclusivo/  # JSONs brutos do torneio Rush Series Inclusivo
+│   └── Univavá/                # JSONs brutos das etapas classificatórias da UNIVAVA
 ├── src/
 │   ├── ingestion/              # Ingestão em lote e tolerância a falhas (Pydantic v2)
 │   ├── models/                 # Schemas tipados de Partida, Round e Abates
@@ -108,34 +134,3 @@ Os mapas são agrupados em 3 níveis no dashboard:
 
 ---
 
-## 🎬 Roteiro Oficial do Vídeo Pitch (5 Minutos)
-
-Guia minuto a minuto para a gravação da apresentação do Hackathon:
-
-### Minuto 0:00 - 0:45 • Abertura, Gancho e o Problema
-* **Apresentação:** "Olá comissão avaliadora! No VALORANT competitivo, saber *onde* o time adversário mata ou morre é básico. O verdadeiro diferencial tático está em responder: **qual posicionamento garante maior probabilidade real de vitória em cada segundo do round?**"
-* **Desafio:** Dados brutos de partidas contêm ruídos, desconexões e mapas com poucas partidas que geram distorções ilusórias de 100% de winrate quando analisados de forma simplista.
-* **Proposta:** Apresentamos a **Plataforma Geoespacial de VALORANT da UNIVAVA** — uma solução analítica rápida, 100% offline e com rigor estatístico bayesiano.
-
-### Minuto 0:45 - 1:45 • Arquitetura e Engenharia de Dados
-* **Volume:** Ingestão de 336 arquivos de partidas universitárias, totalizando mais de 5.000 rounds e 46.700 eliminações.
-* **Resiliência e Desempenho:** Pipeline construído com Pydantic v2 com isolamento de falhas (*error boundary*).
-* **Projeção Precisa:** Conversão matemática das coordenadas tridimensionais da Unreal Engine para o plano 2D normalizado via `maps.json` sem precisar de internet ou chamadas externas.
-* **Exportação Otimizada:** Banco colunar em Parquet e caches em JSON que carregam em milissegundos no dashboard.
-
-### Minuto 1:45 - 3:15 • Demonstração Prática do Dashboard
-* **Destaque do Tier 1:** Mostrar o seletor destacando o trio competitivo de ouro: **Ascent, Lotus e Haven** (71.6% dos confrontos).
-* **Alternância dos 3 Modos:**
-  1. *Mapa de Abates (Kills):* Mostrar no mapa Ascent os ângulos dominantes de controle de Meio (Mid Courtyard) e A Main.
-  2. *Mapa de Mortes (Deaths):* Contrastar imediatamente com os locais onde as vítimas caem (chokepoints e entradas de bombsites).
-  3. *Vantagem Territorial (Winrate Bayesiano):* Destacar a escala divergente. Mostrar como certas áreas geram abates, mas não convertem rounds; enquanto posições como o Pátio de Ascent garantem mais de 65% de vitória.
-* **Segmentação Temporal:** Filtrar por *Início (Early)* para ver disputas de abertura e alternar para *Fim (Late)* para visualizar o controle pós-plant.
-
-### Minuto 3:15 - 4:15 • Rigor Científico e Salvaguarda Estatística
-* **O Dilema de Baixa Amostragem:** Mostrar como mapas com poucas partidas (ex: Breeze com 5 jogos ou Pearl com 3 jogos) são tratados com transparência através do badge de alerta `$N < 10$`.
-* **A Matemática que Protege:** Explicar sucintamente o **Beta Prior Bayesiano**: células com apenas 1 abate não explodem em 100% ou 0%, mas são puxadas de volta ao equilíbrio de 50%, prevenindo conclusões táticas precipitadas da comissão técnica.
-
-### Minuto 4:15 - 5:00 • Impacto Competitivo e Conclusão
-* **Valor para Times Universitários:** Coaches e analistas podem preparar vetos de mapa, desenhar execuções de round e ajustar posicionamentos defensivos com precisão cirúrgica.
-* **Entrega Concluída:** Código 100% testado (23 testes automatizados aprovados), interface fluida, documentação completa e execução offline pronta para implantação.
-* **Fechamento:** "Transformamos logs brutos em vantagem competitiva comprovada. Muito obrigado!"
