@@ -82,14 +82,20 @@ Cada round possui duração variável em função de desarmes ou eliminações a
 * **Fim (Late):** $t \ge \frac{2}{3} \cdot T_{\text{round}}$ (Situações de pós-plant, desarmes e retakes sob pressão)
 
 ### 3. Vantagem Territorial com Regularização Bayesiana
-Em células da grade espacial com poucas amostras (ex: 1 abate e 1 vitória), a taxa de vitória empírica não-regularizada atingiria falsos 100%. Para eliminar esse viés, aplicamos uma suavização espacial gaussiana seguida de um **Beta prior bayesiano** centrado na probabilidade neutra do jogo ($\mu_{\text{global}} = 0.5$):
+Em células da grade espacial com poucas amostras (ex: 1 abate e 1 vitória), a taxa de vitória empírica não-regularizada atingiria falsos 100%. Para eliminar esse viés, aplicamos uma suavização espacial gaussiana seguida de um **Beta prior bayesiano** centrado na probabilidade neutra do jogo (`μ_global = 0.5`):
+
+```text
+                  Wins_smooth(x, y) + α₀
+P̂(Win | x, y) = ──────────────────────────────────
+                Total_smooth(x, y) + α₀ + β₀
+```
 
 $$\hat{P}(\text{Win} \mid x, y) = \frac{\text{Wins}_{\text{smooth}}(x, y) + \alpha_0}{\text{Total}_{\text{smooth}}(x, y) + \alpha_0 + \beta_0}$$
 
-onde:
-* $\alpha_0 = \mu_{\text{global}} \times \text{prior\_weight} = 0.5 \times 5.0 = 2.5$
-* $\beta_0 = (1.0 - \mu_{\text{global}}) \times \text{prior\_weight} = 0.5 \times 5.0 = 2.5$
-* $\text{Wins}_{\text{smooth}}$ e $\text{Total}_{\text{smooth}}$ resultam de filtro gaussiano 2D com $\sigma = 1.8$.
+**Onde:**
+* **α₀** = `μ_global × prior_weight = 0.5 × 5.0 = 2.5`
+* **β₀** = `(1.0 - μ_global) × prior_weight = 0.5 × 5.0 = 2.5`
+* **Wins_smooth** e **Total_smooth** resultam da aplicação de filtro gaussiano 2D com `σ = 1.8`.
 
 Células não observadas permanecem no baseline neutro de 50%, enquanto regiões de alto tráfego convergem para sua taxa real empírica.
 
