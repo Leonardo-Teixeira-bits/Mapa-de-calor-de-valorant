@@ -23,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom VALORANT Dark Theme CSS with Typography & Colors from VALORANT.html
+# Custom VALORANT Dark Theme CSS with Typography & Colors
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
@@ -47,7 +47,7 @@ st.markdown("""
     h1 {
         font-size: 2.6rem !important;
         border-left: 5px solid #FF4655;
-        padding-left: 14px;
+        padding-left: 22px;
         margin-bottom: 0.3rem !important;
     }
 
@@ -68,6 +68,8 @@ st.markdown("""
         font-family: 'Bebas Neue', 'Oswald', sans-serif !important;
         letter-spacing: 0.06em !important;
         color: #ECE8E1 !important;
+        padding-left: 18px !important;
+        
     }
 
     /* HUD-Style Metric Cards */
