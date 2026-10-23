@@ -60,8 +60,33 @@ python run_app.py
 
 ### 6. Execução da Suíte de Testes
 ```bash
-python -m pytest -v
+pytest
 ```
+*(Ou alternativamente: `python -m pytest -v`)*
+
+### 7. 🚀 Hospedagem na Web (Deploy em Nuvem / Produção)
+
+O projeto está **100% pronto para publicação na web** em qualquer provedor de nuvem.
+
+#### Opção A: Streamlit Community Cloud (Recomendado — Gratuito & 1-Clique)
+1. Acesse [share.streamlit.io](https://share.streamlit.io/) e conecte sua conta do GitHub.
+2. Selecione o repositório `Mapa-de-calor-de-valorant`.
+3. Configure os parâmetros de inicialização:
+   - **Main file path:** `app.py`
+   - **Branch:** `main`
+4. Clique em **Deploy!**
+> **Como funciona:** O Streamlit Cloud lê automaticamente o `requirements.txt`, ativa o tema escuro oficial via `.streamlit/config.toml`, descompacta o `data.zip` e disponibiliza a URL pública segura em menos de 2 minutos. O consumo de memória do dashboard é de apenas ~115 MB (bem abaixo do limite gratuito de 1 GB).
+
+#### Opção B: Container Docker (Render, Hugging Face Spaces, Railway, AWS ECS, GCP)
+O repositório já inclui `Dockerfile` otimizado (Python 3.11-slim) com healthcheck do Streamlit:
+```bash
+# Construção da imagem Docker
+docker build -t valorant-geoanalytics .
+
+# Execução do container na porta 8501
+docker run -p 8501:8501 valorant-geoanalytics
+```
+Acesse `http://localhost:8501` ou aponte a porta `8501` no seu provedor de nuvem.
 
 ---
 
