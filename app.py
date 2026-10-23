@@ -187,6 +187,9 @@ def ensure_data_extracted():
         with zipfile.ZipFile(zip_path, "r") as z:
             z.extractall(Path(__file__).resolve().parent)
 
+# Guarantee data extraction on module load
+ensure_data_extracted()
+
 
 def main():
     ensure_data_extracted()
