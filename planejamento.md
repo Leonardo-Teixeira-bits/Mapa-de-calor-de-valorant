@@ -1,4 +1,4 @@
-Aqui está a especificação técnica detalhada e o planejamento arquitetural para o projeto de **Análise Geoespacial de Partidas de VALORANT**, estruturado para dar suporte total ao desenvolvimento por *vibecoding*.
+Aqui está a especificação técnica detalhada e o planejamento arquitetural para o projeto de **Análise Geoespacial de Partidas de VALORANT**, estruturado para dar suporte total ao desenvolvimento
 
 ## **1\. Análise dos Requisitos** 
 

@@ -220,7 +220,7 @@ def main():
 
     # Sidebar Controls
     st.sidebar.image(
-        "https://logopng.com.br/logos/valorant-192.svg?dpl=dpl_83xWKUBiCCc88zqvgK1XNSG8JXgj",
+        "valorant-192.svg",
         width=50
     )
     st.sidebar.title("VALORANT Analytics")
