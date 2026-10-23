@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-21)
 Phase: 2 of 2 (Dashboard Interativo em Streamlit + Plotly e Pacote de Pitch)
 Plan: 2 of 2 in Phase 2
 Status: All phases complete
-Last activity: 2026-10-21 — Dashboard Plotly/Streamlit, 23/23 testes passando, documentação completa e pitch script finalizados
+Last activity: 2026-10-22 — Validação e prontidão para hospedagem web (.streamlit/config.toml, Dockerfile, pyproject, 26/26 testes)
 
 Progress: [██████████] 100%
 
@@ -75,6 +75,7 @@ Progress: [██████████] 100%
 |------|------|--------|-------------|
 | quick-add-data-zip | 2026-10-21 | complete ✓ | Inclusão do data.zip no repo, suporte a auto-extração e atualização do README.md |
 | valorant-ui-and-weapon-mapping | 2026-10-22 | complete ✓ | Alinhamento visual ao VALORANT.html (cores/fontes) e resolução de UUIDs de armas/itens |
+| web-hosting-readiness | 2026-10-22 | complete ✓ | Configuração e validação de deploy web (Streamlit Cloud, Docker, .streamlit, pyproject) |
 
 ### Pending Todos
 
